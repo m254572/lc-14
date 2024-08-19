@@ -1,0 +1,45 @@
+# ignore `.env` files. We maintain `.env.example` files that must contain the required keys that are filled with specific values
+.vscode
+*.env
+*service_account.json
+
+# keep the datasets directory but ignore any downloaded data
+data/*
+!data/datasets
+data/datasets/*
+
+# ignore checkpoints
+*-checkpoint.ipynb
+
+# ignore terraform artifacts
+*.tfstate
+*.tfstate.backup
+*.tfplan
+.terraform
+.terraform.lock.hcl
+
+# ignore python artifacts
+*.pyc
+*.pyo
+*.venv
+*.egg-info
+**/build/*
+dist/
+*.whl
+*.egg
+__pycache__/
+
+# ignore pytorch artifacts
+*.pth
+*.pth.tar
+*.pt
+
+# ignore data files
+*.csv
+*.json
+*.pkl
+*.old
+
+# keep the env files for docker compose
+!services/.env
+!.env

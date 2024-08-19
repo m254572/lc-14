@@ -1,0 +1,78 @@
+networks:
+  server:
+  client:
+
+services:
+  nginx:
+    build: ./services/nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9000:9000"
+    volumes:
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - mlflow
+      - minio
+    networks:
+      - server
+      - client
+    profiles:
+      - server
+      - client
+
+  minio:
+    build: ./services/minio 
+    env_file:
+      - .env
+    command: server /data
+    volumes:
+      - ./data/minio_data:/data
+    networks:
+      - server
+    profiles:
+      - server
+
+  mlflow:
+    build: ./services/mlflow
+    env_file:
+      - .env
+      - ./services/mlflow/.env
+    depends_on:
+      - minio
+    volumes:
+      - ./data/mlflow_data:/mlflow_artifacts
+    networks:
+      - server
+    profiles:
+      - server
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        mc config host add minio "${MLFLOW_S3_ENDPOINT_URL}" "${AWS_ACCESS_KEY_ID}" "${AWS_SECRET_ACCESS_KEY}"
+        mc admin policy create minio mlflow.json mlflow-policy.json
+        mc mb minio/mlflow
+        mlflow server --host=0.0.0.0 --backend-store-uri=${MLFLOW_BACKEND_URI} --artifacts-destination=${MLFLOW_DEFAULT_ARTIFACT_ROOT} --default-artifact-root=${MLFLOW_DEFAULT_ARTIFACT_ROOT}
+
+  jupyter-python:
+    build: ./services/jupyter
+    env_file:
+      - .env
+      - ./services/jupyter/.env
+    volumes:
+      - ./data/datasets:/home/jupyter/work/notebooks/data
+      - ./services/jupyter/notebooks/python:/home/jupyter/work/notebooks/python
+      - ./services/jupyter/notebooks/r:/home/jupyter/work/notebooks/r
+      - ./src:/home/jupyter/work/src
+    ports:
+      - "8888:8888"
+    networks:
+      - client
+    profiles:
+      - client
+
+volumes:
+  minio_data:
+  mlflow_data:
