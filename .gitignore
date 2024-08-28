@@ -40,6 +40,5 @@ __pycache__/
 !.env
 
 # keep the datasets directory but ignore any downloaded data
-!data/datasets
 data/datasets/*
 !data/datasets/README.md
