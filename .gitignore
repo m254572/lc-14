@@ -3,11 +3,6 @@
 *.env
 *service_account.json
 
-# keep the datasets directory but ignore any downloaded data
-data/*
-!data/datasets
-data/datasets/*
-
 # ignore checkpoints
 *-checkpoint.ipynb
 
@@ -43,3 +38,8 @@ __pycache__/
 # keep the env files for docker compose
 !services/.env
 !.env
+
+# keep the datasets directory but ignore any downloaded data
+!data/datasets
+data/datasets/*
+!data/datasets/README.md
