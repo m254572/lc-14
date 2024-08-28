@@ -16,7 +16,6 @@ services:
     depends_on:
       - mlflow
       - minio
-      - jupyter
     networks:
       - server
       - client
@@ -57,14 +56,14 @@ services:
       - .env
       - ./services/jupyter/.env
     volumes:
-      - ./data/datasets:/home/jupyter/work/notebooks/data
+      - ./data/datasets:/home/jupyter/work/data
       - ./services/jupyter/notebooks/python:/home/jupyter/work/notebooks/python
       - ./services/jupyter/notebooks/r:/home/jupyter/work/notebooks/r
       - ./src:/home/jupyter/work/src
     ports:
       - "8888:8888"
     networks:
-      - server
+      - client
 
 volumes:
   minio_data:
