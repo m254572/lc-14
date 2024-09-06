@@ -42,3 +42,5 @@ __pycache__/
 # keep the datasets directory but ignore any downloaded data
 data/*
 !data/datasets/README.md
+!data/datasets/*/DATASET.md
+!data/datasets/*/CITATION.md
