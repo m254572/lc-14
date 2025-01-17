@@ -1,9 +1,0 @@
-boto3
-mlflow
-scikit-learn
-Pillow
-tqdm
-torch
-torchvision
-matplotlib
-opencv-python
